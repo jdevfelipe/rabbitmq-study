@@ -1,0 +1,18 @@
+spring:
+  rabbitmq:
+    custom:
+      shared:
+        host: ${RABBIT_HOST:localhost}
+        port: ${RABBIT_PORT:5672}
+        ttlRetryMessage: 10000
+        maxRetriesAttempts: 5
+        autoCreate: true
+      test-event:
+        ttlMultiply: 2
+        queueRoutingKey: ${REPLICATE-PRODUCT-ROUTING_KEY:test-routing-key}
+        exchange: ${REPLICATE-PRODUCT-EXCHANGE:test-exchange}
+        exchangeType: topic
+        queue: ${REPLICATE-PRODUCT-QUEUE:test-queue}
+        username: ${RABBIT_USERNAME:guest}
+        password: ${RABBIT_PASSWORD:guest}
+        primary: true

@@ -1,7 +1,8 @@
 package com.study.rabbitmq.controllers;
 
 import com.study.rabbitmq.dtos.TestDTO;
-import com.study.rabbitmq.producer.QueueSender;
+import com.tradeshift.amqp.rabbit.handlers.RabbitTemplateHandler;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,14 +12,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test")
 public class TestController {
 
-    private final QueueSender producer;
+    @Value("${spring.rabbitmq.custom.test-event.exchange}")
+    private String exchangeSomeEvent;
 
-    public TestController(QueueSender producer) {
-        this.producer = producer;
+    @Value("${spring.rabbitmq.custom.test-event.queueRoutingKey}")
+    private String routingKeySomeEvent;
+
+    private final RabbitTemplateHandler rabbitTemplateHandler;
+
+    public TestController(RabbitTemplateHandler rabbitTemplateHandler) {
+        this.rabbitTemplateHandler = rabbitTemplateHandler;
     }
 
     @PostMapping
     public void produce(@RequestBody TestDTO dto) {
-        producer.send(dto.getMessage());
+        rabbitTemplateHandler.getRabbitTemplate("test-event").convertAndSend(exchangeSomeEvent, routingKeySomeEvent, dto.getMessage());
     }
 }
