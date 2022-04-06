@@ -8,7 +8,6 @@ spring:
         maxRetriesAttempts: 5
         autoCreate: true
       test-event:
-        ttlMultiply: 2
         queueRoutingKey: ${REPLICATE-PRODUCT-ROUTING_KEY:test-routing-key}
         exchange: ${REPLICATE-PRODUCT-EXCHANGE:test-exchange}
         exchangeType: topic
@@ -16,3 +15,11 @@ spring:
         username: ${RABBIT_USERNAME:guest}
         password: ${RABBIT_PASSWORD:guest}
         primary: true
+      test-event-consumer:
+        ttlMultiply: 2
+        queueRoutingKey: ${REPLICATE-PRODUCT-ROUTING_KEY:test-routing-key-consumer}
+        exchange: ${REPLICATE-PRODUCT-EXCHANGE:test-exchange-consumer}
+        exchangeType: topic
+        queue: ${REPLICATE-PRODUCT-QUEUE:test-queue-consumer}
+        username: ${RABBIT_USERNAME:guest}
+        password: ${RABBIT_PASSWORD:guest}
